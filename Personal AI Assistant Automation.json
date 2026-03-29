@@ -1,0 +1,304 @@
+{
+  "name": "Personal AI Assistant Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.messages[0].text.body }}",
+        "options": {
+          "systemMessage": "You are Faria's Personal AI Assistant. Your name is \"Aria\". Your job is to help Faria with her university life, schedule, and daily tasks.\n\n## About Faria:\n- Full Name: Faria Sajid\n- Roll Number: 24011556-020\n- Department: Information Technology\n- Program: BS in Information Technology\n- Date of Birth: April 12, 2007 (Age: 19)\n- Blood Group: B+\n- Primary Email: fariasajid68@gmail.com\n- Secondary Email: fariasajid2007@gmail.com\n- University Email: 24011556-020@uog.edu.pk\n- Mobile: 0321-9526786\n- City: Sara-i-Alamgir\n- Address: Mohalla shaheedan sarai Alamgir\n\n## Emergency Contact:\n- Name: Sajid Mehmood Butt (Father)\n- Contact: 0321-9526010\n\n## Bus Information:\n- Route: Sarai Alamgir\n- Pickup Time: 6:30 AM\n- Bus Stop: UOG Bus Stop Sarai Alamgir\n\n## Academic Background:\n- Matriculation: 89.18% (2022) from BISE Gujranwala\n- Intermediate (ICS): 84.08% (2024) from BISE Gujranwala\n- Currently enrolled in BS IT at University of Gujrat\n- Currently in 4th semester\n- 1st semester SGPA: 3.6\n- 2nd semester SGPA: 3.85\n- 3rd semester SGPA: 3.8\n- Current CGPA: 3.76\n\n## Your Capabilities:\n1. You can access Faria's timetable (classes, days, times, rooms, instructors)\n2. You can answer questions about her schedule\n3. You can add new events (assignments, quizez, presentations) to her schedule\n4. You can remind her about upcoming deadlines\n5. You know her personal details and can answer questions about them\n6. You are friendly, helpful, and professional\n\n## Communication Style:\n- Be warm and friendly but concise\n- Address Faria by her name\n- Use emojis occasionally to make messages engaging 📚🎓✨\n- When giving schedule information, be clear about time, location, and instructor\n- If you don't know something, say sorry and offer to help find out\n\n## Available Tools:\n- TimeTable: Use this to look up Faria's timetable or specific events\n- AddEvent: Use this when Faria asks to add a new assignment, quiz or presentation\n\n## Instructions:\n- Always confirm when you've added something to her schedule\n- If asked about personal details, refer to the information above\n- Be proactive - if Faria seems stressed about deadlines, offer to help organize\n- Remember that Faria is a BS IT student at UOG\n- Give concise and clear answers"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        472,
+        336
+      ],
+      "id": "8f843f01-14e2-4a00-8e6c-e91951430740",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('WhatsApp Trigger').item.json.contacts[0].wa_id }}",
+        "contextWindowLength": 20
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        480,
+        560
+      ],
+      "id": "90598b13-e98e-436e-882b-f620ec8d8365",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "messages"
+        ],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "position": [
+        128,
+        336
+      ],
+      "id": "3a050d08-cf3c-447f-8db8-a0ca0002d9c2",
+      "name": "WhatsApp Trigger",
+      "webhookId": "bfaaa69b-80e4-4b1a-91ea-aa5fb4a221b7",
+      "credentials": {
+        "whatsAppTriggerApi": {
+          "id": "5OxFBONai4Fjlr8p",
+          "name": "WhatsApp OAuth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "=1115536674969776",
+        "recipientPhoneNumber": "+92 321-9526786",
+        "textBody": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        944,
+        336
+      ],
+      "id": "51a6decb-1308-4ba3-a7d3-8fa31f267c1e",
+      "name": "Send message",
+      "webhookId": "cf9391fa-453b-4f51-b61a-5dd9d781911b",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "ewbRvHucm50sHKp5",
+          "name": "WhatsApp account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1SPQ6Hhz93ks1y_RwW1bUEsEbFV7wbhGaId1ZelqfbTI",
+          "mode": "list",
+          "cachedResultName": "AI Assistant",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SPQ6Hhz93ks1y_RwW1bUEsEbFV7wbhGaId1ZelqfbTI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "TimeTable",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SPQ6Hhz93ks1y_RwW1bUEsEbFV7wbhGaId1ZelqfbTI/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        608,
+        560
+      ],
+      "id": "b27ae716-5a71-44e6-b89b-20535e0dc76f",
+      "name": "TimeTable",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xSALg93eQTdgr8tu",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1SPQ6Hhz93ks1y_RwW1bUEsEbFV7wbhGaId1ZelqfbTI",
+          "mode": "list",
+          "cachedResultName": "AI Assistant",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SPQ6Hhz93ks1y_RwW1bUEsEbFV7wbhGaId1ZelqfbTI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 945717630,
+          "mode": "list",
+          "cachedResultName": "AddEvent",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SPQ6Hhz93ks1y_RwW1bUEsEbFV7wbhGaId1ZelqfbTI/edit#gid=945717630"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Type": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Type', ``, 'string') }}",
+            "Date": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Date', ``, 'string') }}",
+            "Topic": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Topic', ``, 'string') }}",
+            "Subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Type",
+              "displayName": "Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Subject",
+              "displayName": "Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Topic",
+              "displayName": "Topic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        736,
+        560
+      ],
+      "id": "d51ddd8f-c372-4248-a55c-448eb4a75d9e",
+      "name": "AddEvent",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xSALg93eQTdgr8tu",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        352,
+        560
+      ],
+      "id": "90849e1c-e8ec-4479-942a-dc82782729be",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "esaDIkPUtY5A5Dnn",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TimeTable": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AddEvent": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "e4629171-481d-4a0d-9cdf-d596b2bb20ad",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "98dd8db6a2dd38203f3b4dac99fba2ba7445ee186c10aaff77fddd96d380293d"
+  },
+  "id": "y69mjUYow06JdSf4",
+  "tags": []
+}
